@@ -1,35 +1,27 @@
-import React from 'react'
+import React from 'react';
 
 type Props = {
-  value: string | number
-  onChange: (value: string | number) => void
-  debounce?: number
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
+   value: string | number;
+   onChange: (value: string | number) => void;
+   debounce?: number;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
 
-export const DebouncedInput: React.FC<Props> = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}) => {
-  const [value, setValue] = React.useState<number | string>(initialValue)
+export const DebouncedInput: React.FC<Props> = ({ value: initialValue, onChange, debounce = 500, ...props }) => {
+   const [value, setValue] = React.useState<number | string>(initialValue);
+   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);
+   React.useEffect(() => {
+      setValue(initialValue);
+   }, [initialValue]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(event.target.value)
+   React.useEffect(() => {
+      const timeout = setTimeout(() => {
+         onChange(value);
+      }, debounce);
 
-  React.useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+      return () => clearTimeout(timeout);
+   }, [value]);
 
-  React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(value)
-    }, debounce)
+   return <input {...props} value={value} onChange={handleInputChange} />;
+};
 
-    return () => clearTimeout(timeout)
-  }, [value])
-
-  return <input {...props} value={value} onChange={handleInputChange} />
-}
-
-export default DebouncedInput
+export default DebouncedInput;
