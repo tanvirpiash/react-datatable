@@ -1,24 +1,6 @@
-import { RowData, RowModel } from '@tanstack/react-table';
 import React from 'react';
 
-type Props<T extends RowData> = {
-   getSelectedRowModel: () => RowModel<T>;
-   hasNextPage: boolean;
-   hasPreviousPage: boolean;
-   nextPage: () => void;
-   pageCount: number;
-   pageIndex: number;
-   pageSize: number;
-   previousPage: () => void;
-   refreshData: () => void;
-   rerender: () => void;
-   rowSelection: Object;
-   setPageIndex: (index: number) => void;
-   setPageSize: (size: number) => void;
-   totalRows: number;
-};
-
-export function ActionButtons<T extends RowData>({
+export function ActionButtons({
    getSelectedRowModel,
    hasNextPage,
    hasPreviousPage,
@@ -33,7 +15,7 @@ export function ActionButtons<T extends RowData>({
    setPageIndex,
    setPageSize,
    totalRows,
-}: Props<T>) {
+}) {
    return (
       <React.Fragment>
          <div className='flex items-center gap-2'>

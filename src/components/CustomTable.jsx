@@ -1,14 +1,9 @@
-import { flexRender, HeaderGroup, Row, RowData, Table } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 import React from 'react';
 import Filter from './Filter';
 import TablePins from './TablePins';
 
-type TableGroup = 'center' | 'left' | 'right';
-
-function getTableHeaderGroups<T extends RowData>(
-   table: Table<T>,
-   tg?: TableGroup
-): [HeaderGroup<T>[], HeaderGroup<T>[]] {
+function getTableHeaderGroups(table, tg) {
    if (tg === 'left') {
       return [table.getLeftHeaderGroups(), table.getLeftFooterGroups()];
    }
@@ -24,19 +19,14 @@ function getTableHeaderGroups<T extends RowData>(
    return [table.getHeaderGroups(), table.getFooterGroups()];
 }
 
-function getRowGroup<T extends RowData>(row: Row<T>, tg?: TableGroup) {
+function getRowGroup(row, tg) {
    if (tg === 'left') return row.getLeftVisibleCells();
    if (tg === 'right') return row.getRightVisibleCells();
    if (tg === 'center') return row.getCenterVisibleCells();
    return row.getVisibleCells();
 }
 
-type Props<T extends RowData> = {
-   table: Table<T>;
-   tableGroup?: TableGroup;
-};
-
-export function CustomTable<T extends RowData>({ table, tableGroup }: Props<T>) {
+export function CustomTable({ table, tableGroup }) {
    const [headerGroups, footerGroup] = getTableHeaderGroups(table, tableGroup);
    return (
       <table>
@@ -71,7 +61,7 @@ export function CustomTable<T extends RowData>({ table, tableGroup }: Props<T>) 
                                     {{
                                        asc: '🔼',
                                        desc: '�',
-                                    }[header.column.getIsSorted() as string] ?? '📶'}
+                                    }[header.column.getIsSorted()] ?? '📶'}
                                  </button>
                               </div>
                               {header.column.getCanFilter() ? (

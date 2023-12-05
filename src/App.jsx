@@ -1,5 +1,4 @@
 import {
-   ColumnFiltersState,
    getCoreRowModel,
    getFacetedMinMaxValues,
    getFacetedRowModel,
@@ -8,7 +7,6 @@ import {
    getGroupedRowModel,
    getPaginationRowModel,
    getSortedRowModel,
-   GroupingState,
    useReactTable,
 } from '@tanstack/react-table';
 import React from 'react';
@@ -71,11 +69,11 @@ export const App = () => {
    const refreshData = () => setData(makeData(1000));
 
    const [columnVisibility, setColumnVisibility] = React.useState({});
-   const [grouping, setGrouping] = React.useState<GroupingState>([]);
+   const [grouping, setGrouping] = React.useState([]);
    const [isSplit, setIsSplit] = React.useState(false);
    const [rowSelection, setRowSelection] = React.useState({});
    const [columnPinning, setColumnPinning] = React.useState({});
-   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+   const [columnFilters, setColumnFilters] = React.useState([]);
    const [globalFilter, setGlobalFilter] = React.useState('');
 
    const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();

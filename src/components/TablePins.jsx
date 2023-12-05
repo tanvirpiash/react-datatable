@@ -1,12 +1,6 @@
-import { ColumnPinningPosition } from '@tanstack/react-table';
 import React from 'react';
 
-type Props = {
-   isPinned: ColumnPinningPosition;
-   pin: (position: ColumnPinningPosition) => void;
-};
-
-export const TablePins: React.FC<Props> = ({ isPinned, pin }) => {
+export const TablePins = ({ isPinned, pin }) => {
    const pinLeft = () => pin('left');
    const unPin = () => pin(false);
    const pinRight = () => pin('right');

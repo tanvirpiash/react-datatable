@@ -1,14 +1,7 @@
-import { Column, RowData, Table } from '@tanstack/react-table';
 import React from 'react';
 import DebouncedInput from './DebouncedInput';
 
-type NumberInputProps = {
-   columnFilterValue: [number, number];
-   getFacetedMinMaxValues: () => [number, number] | undefined;
-   setFilterValue: (updater: any) => void;
-};
-
-const NumberInput: React.FC<NumberInputProps> = ({ columnFilterValue, getFacetedMinMaxValues, setFilterValue }) => {
+const NumberInput = ({ columnFilterValue, getFacetedMinMaxValues, setFilterValue }) => {
    const minOpt = getFacetedMinMaxValues()?.[0];
    const min = Number(minOpt ?? '');
 
@@ -23,7 +16,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ columnFilterValue, getFaceted
                min={min}
                max={max}
                value={columnFilterValue?.[0] ?? ''}
-               onChange={(value) => setFilterValue((old: [number, number]) => [value, old?.[1]])}
+               onChange={(value) => setFilterValue((old) => [value, old?.[1]])}
                placeholder={`Min ${minOpt ? `(${min})` : ''}`}
                className='w-24 border shadow rounded'
             />
@@ -32,7 +25,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ columnFilterValue, getFaceted
                min={min}
                max={max}
                value={columnFilterValue?.[1] ?? ''}
-               onChange={(value) => setFilterValue((old: [number, number]) => [old?.[0], value])}
+               onChange={(value) => setFilterValue((old) => [old?.[0], value])}
                placeholder={`Max ${maxOpt ? `(${max})` : ''}`}
                className='w-24 border shadow rounded'
             />
@@ -42,26 +35,12 @@ const NumberInput: React.FC<NumberInputProps> = ({ columnFilterValue, getFaceted
    );
 };
 
-type TextInputProps = {
-   columnId: string;
-   columnFilterValue: string;
-   columnSize: number;
-   setFilterValue: (updater: any) => void;
-   sortedUniqueValues: any[];
-};
-
-const TextInput: React.FC<TextInputProps> = ({
-   columnId,
-   columnFilterValue,
-   columnSize,
-   setFilterValue,
-   sortedUniqueValues,
-}) => {
+const TextInput = ({ columnId, columnFilterValue, columnSize, setFilterValue, sortedUniqueValues }) => {
    const dataListId = columnId + 'list';
    return (
       <React.Fragment>
          <datalist id={dataListId}>
-            {sortedUniqueValues.slice(0, 5000).map((value: any) => (
+            {sortedUniqueValues.slice(0, 5000).map((value) => (
                <option value={value} key={value} />
             ))}
          </datalist>
@@ -78,12 +57,7 @@ const TextInput: React.FC<TextInputProps> = ({
    );
 };
 
-type Props<T extends RowData> = {
-   column: Column<T, unknown>;
-   table: Table<T>;
-};
-
-export function Filter<T extends RowData>({ column, table }: Props<T>) {
+export function Filter({ column, table }) {
    const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
    const columnFilterValue = column.getFilterValue();
    const uniqueValues = column.getFacetedUniqueValues();
@@ -93,14 +67,14 @@ export function Filter<T extends RowData>({ column, table }: Props<T>) {
    );
    return typeof firstValue === 'number' ? (
       <NumberInput
-         columnFilterValue={columnFilterValue as [number, number]}
+         columnFilterValue={columnFilterValue}
          getFacetedMinMaxValues={column.getFacetedMinMaxValues}
          setFilterValue={column.setFilterValue}
       />
    ) : (
       <TextInput
          columnId={column.id}
-         columnFilterValue={columnFilterValue as string}
+         columnFilterValue={columnFilterValue}
          columnSize={uniqueValues.size}
          setFilterValue={column.setFilterValue}
          sortedUniqueValues={sortedUniqueValues}
